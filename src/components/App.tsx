@@ -87,8 +87,8 @@ export const App: React.FC = () => {
   }
 
   return (
-    <Box flexDirection="column" height="100%">
-      <Box display={currentView === 'timeline' ? 'flex' : 'none'} height="100%">
+    <Box flexDirection="column" height={process.stdout.rows}>
+      <Box display={currentView === 'timeline' ? 'flex' : 'none'} height={process.stdout.rows}>
         <Timeline 
           blueskyService={blueskyService} 
           onNavigate={handleNavigate} 

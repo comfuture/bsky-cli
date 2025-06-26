@@ -32,8 +32,11 @@ export const PostItem: React.FC<PostItemProps> = React.memo(({ post, isSelected 
       <Box
         borderStyle="single"
         borderColor={borderColor}
-        paddingX={1}
-        marginY={0}
+        paddingLeft={1}
+        paddingRight={1}
+        paddingTop={0}
+        paddingBottom={0}
+        marginBottom={1}
         flexDirection="column"
         flexGrow={1}
       >
@@ -47,11 +50,11 @@ export const PostItem: React.FC<PostItemProps> = React.memo(({ post, isSelected 
         <Text dimColor>{timeAgo}</Text>
       </Box>
 
-      <Box marginTop={0}>
+      <Box>
         <Text wrap="wrap">{formatText(post.text)}</Text>
       </Box>
 
-      <Box marginTop={0} gap={2}>
+      <Box gap={2}>
         <Text dimColor>
           {post.viewer?.like ? chalk.red('♥') : '♥'} {post.likeCount}
         </Text>

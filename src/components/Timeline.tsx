@@ -40,10 +40,11 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate, 
   }, [])
 
   useEffect(() => {
-    // Calculate visible area (reserve 4 rows for header and footer)
-    const visibleRows = Math.max(1, windowHeight - 4)
-    const itemHeight = 5 // Approximate height of each post item
-    const maxVisibleItems = Math.floor(visibleRows / itemHeight)
+    // Calculate visible area with proper reserved space
+    const reservedRows = 8 // 3 header + 3 footer + 2 padding
+    const availableHeight = Math.max(1, windowHeight - reservedRows)
+    const itemHeight = 6 // Each post item height
+    const maxVisibleItems = Math.floor(availableHeight / itemHeight)
     
     // Adjust scroll offset to keep selected item visible
     if (selectedIndex < scrollOffset) {
@@ -116,11 +117,11 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate, 
       }
     } else if (key.pageUp && posts.length > 0) {
       // Page up - move up by visible items count
-      const pageSize = Math.floor((windowHeight - 4) / 5)
+      const pageSize = Math.floor((windowHeight - 8) / 6)
       setSelectedIndex(Math.max(0, selectedIndex - pageSize))
     } else if (key.pageDown && posts.length > 0) {
       // Page down - move down by visible items count
-      const pageSize = Math.floor((windowHeight - 4) / 5)
+      const pageSize = Math.floor((windowHeight - 8) / 6)
       const newIndex = Math.min(posts.length - 1, selectedIndex + pageSize)
       setSelectedIndex(newIndex)
       // Auto-load more if needed
@@ -200,9 +201,11 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate, 
   }
 
   // Calculate visible posts
-  const visibleRows = Math.max(1, windowHeight - 4)
-  const itemHeight = 5
-  const maxVisibleItems = Math.floor(visibleRows / itemHeight)
+  // Reserve space: 3 for header, 3 for footer, 2 for padding
+  const reservedRows = 8
+  const availableHeight = Math.max(1, windowHeight - reservedRows)
+  const itemHeight = 6 // Each post takes about 6 rows (including border and spacing)
+  const maxVisibleItems = Math.floor(availableHeight / itemHeight)
   const visiblePosts = posts.slice(scrollOffset, scrollOffset + maxVisibleItems)
   
   // Calculate scroll indicator
@@ -212,8 +215,8 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate, 
     : 0
 
   return (
-    <Box flexDirection="column" height="100%">
-      <Box borderStyle="single" borderColor="blue" paddingX={1} justifyContent="space-between">
+    <Box flexDirection="column" height={windowHeight - 1}>
+      <Box borderStyle="single" borderColor="blue" paddingX={1} justifyContent="space-between" flexShrink={0}>
         <Text bold>{chalk.blueBright('🦋 Bluesky Terminal')} - Timeline</Text>
         {showScrollIndicator && (
           <Text dimColor>
@@ -222,7 +225,7 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate, 
         )}
       </Box>
 
-      <Box flexDirection="column" flexGrow={1} overflow="hidden">
+      <Box flexDirection="column" flexGrow={1} overflow="hidden" height={availableHeight}>
         {visiblePosts.map((post, visibleIndex) => {
           const actualIndex = scrollOffset + visibleIndex
           return (
@@ -248,8 +251,8 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate, 
         )}
       </Box>
 
-      <Box borderStyle="single" borderColor="gray" paddingX={1}>
-        <Text dimColor>
+      <Box borderStyle="single" borderColor="gray" paddingX={1} flexShrink={0}>
+        <Text dimColor wrap="truncate">
           [↑↓/jk] Nav  [PgUp/Dn] Page  [g/G] Top/End  [l] Like  [c] Compose  [r] Refresh  [L] Logout  [q] Quit
         </Text>
       </Box>
