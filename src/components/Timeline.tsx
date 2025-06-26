@@ -8,9 +8,10 @@ import { PostItem } from './PostItem.js'
 interface TimelineProps {
   blueskyService: BlueskyService
   onNavigate: (view: string) => void
+  isActive?: boolean
 }
 
-export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate }) => {
+export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate, isActive = true }) => {
   const [posts, setPosts] = useState<TimelinePost[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
@@ -51,7 +52,7 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate }
     } else if (input === 'l' && posts[selectedIndex]) {
       handleLike(posts[selectedIndex])
     }
-  })
+  }, { isActive })
 
   const handleLike = async (post: TimelinePost) => {
     try {

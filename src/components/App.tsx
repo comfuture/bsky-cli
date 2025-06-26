@@ -42,7 +42,7 @@ export const App: React.FC = () => {
       // Logout with capital L
       handleLogout()
     }
-  }, { isActive: isAuthenticated })
+  }, { isActive: isAuthenticated && currentView !== 'compose' })
 
   const handleLogin = async (identifier: string, password: string) => {
     const success = await authService.login(identifier, password)
@@ -97,20 +97,15 @@ export const App: React.FC = () => {
   return (
     <Box flexDirection="column" height="100%">
       {currentView === 'timeline' && (
-        <Timeline blueskyService={blueskyService} onNavigate={handleNavigate} />
+        <Timeline blueskyService={blueskyService} onNavigate={handleNavigate} isActive={true} />
       )}
       
       {currentView === 'compose' && (
-        <Box flexDirection="column" height="100%">
-          <Timeline blueskyService={blueskyService} onNavigate={handleNavigate} />
-          <Box position="absolute" marginTop={5} marginLeft={10} width="80%">
-            <PostComposer 
-              blueskyService={blueskyService}
-              onClose={() => setCurrentView('timeline')}
-              onPost={handlePostComplete}
-            />
-          </Box>
-        </Box>
+        <PostComposer 
+          blueskyService={blueskyService}
+          onClose={() => setCurrentView('timeline')}
+          onPost={handlePostComplete}
+        />
       )}
 
       {currentView === 'profile' && (

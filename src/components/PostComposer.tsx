@@ -51,35 +51,38 @@ export const PostComposer: React.FC<PostComposerProps> = ({
   }
 
   return (
-    <Box flexDirection="column" borderStyle="double" borderColor="blue" padding={1}>
-      <Box justifyContent="space-between" marginBottom={1}>
-        <Text bold>{chalk.blueBright('Compose Post')}</Text>
-        <Text color={remaining < 0 ? 'red' : remaining < 50 ? 'yellow' : 'green'}>
-          {remaining} characters
-        </Text>
-      </Box>
-
-      <Box flexDirection="column">
-        <TextInput
-          value={text}
-          onChange={setText}
-          onSubmit={handleSubmit}
-          placeholder="What's happening?"
-          showCursor={!isPosting}
-        />
-      </Box>
-
-      {error && (
-        <Box marginTop={1}>
-          <Text color="red">Error: {error}</Text>
+    <Box flexDirection="column" height="100%">
+      <Box flexDirection="column" borderStyle="double" borderColor="blue" padding={1} marginTop={2}>
+        <Box justifyContent="space-between" marginBottom={1}>
+          <Text bold>{chalk.blueBright('📝 Compose Post')}</Text>
+          <Text color={remaining < 0 ? 'red' : remaining < 50 ? 'yellow' : 'green'}>
+            {remaining} characters
+          </Text>
         </Box>
-      )}
 
-      <Box marginTop={1} gap={2}>
-        <Text dimColor>
-          {isPosting ? 'Posting...' : '[Ctrl+D] Post'}
-        </Text>
-        <Text dimColor>[Esc] Cancel</Text>
+        <Box flexDirection="column" minHeight={3}>
+          <TextInput
+            value={text}
+            onChange={setText}
+            onSubmit={handleSubmit}
+            placeholder="What's happening?"
+            showCursor={!isPosting}
+            focus={true}
+          />
+        </Box>
+
+        {error && (
+          <Box marginTop={1}>
+            <Text color="red">Error: {error}</Text>
+          </Box>
+        )}
+
+        <Box marginTop={1} gap={2}>
+          <Text dimColor>
+            {isPosting ? 'Posting...' : '[Ctrl+D] Post  [Enter] Send'}
+          </Text>
+          <Text dimColor>[Esc] Cancel</Text>
+        </Box>
       </Box>
     </Box>
   )
