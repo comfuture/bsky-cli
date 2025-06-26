@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Text, useInput, useApp } from 'ink'
+import { Box, Text } from 'ink'
 import Spinner from 'ink-spinner'
 import { BlueskyService } from '../services/bluesky.js'
 import { AuthService } from '../services/auth.js'
@@ -8,7 +8,6 @@ import { Timeline } from './Timeline.js'
 import { PostComposer } from './PostComposer.js'
 
 export const App: React.FC = () => {
-  const { exit } = useApp()
   const [blueskyService] = useState(() => new BlueskyService())
   const [authService] = useState(() => new AuthService(blueskyService))
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -35,14 +34,7 @@ export const App: React.FC = () => {
     }
   }
 
-  useInput((input) => {
-    if (input === 'q' && currentView !== 'compose') {
-      exit()
-    } else if (input === 'L' && isAuthenticated) {
-      // Logout with capital L
-      handleLogout()
-    }
-  }, { isActive: isAuthenticated && currentView !== 'compose' })
+  // Remove global input handler - let Timeline handle all inputs when active
 
   const handleLogin = async (identifier: string, password: string) => {
     const success = await authService.login(identifier, password)
@@ -96,9 +88,14 @@ export const App: React.FC = () => {
 
   return (
     <Box flexDirection="column" height="100%">
-      {currentView === 'timeline' && (
-        <Timeline blueskyService={blueskyService} onNavigate={handleNavigate} isActive={true} />
-      )}
+      <Box display={currentView === 'timeline' ? 'flex' : 'none'} height="100%">
+        <Timeline 
+          blueskyService={blueskyService} 
+          onNavigate={handleNavigate} 
+          isActive={currentView === 'timeline'}
+          onLogout={handleLogout}
+        />
+      </Box>
       
       {currentView === 'compose' && (
         <PostComposer 

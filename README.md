@@ -4,10 +4,11 @@ A fancy terminal client for Bluesky built with TypeScript and Ink (React for CLI
 
 ## Features
 
-- 🚀 Interactive timeline browsing
+- 🚀 Interactive timeline browsing with smooth scrolling
 - ✍️ Compose and post updates
 - ❤️ Like and interact with posts  
-- ⌨️ Keyboard navigation
+- ⌨️ Advanced keyboard navigation (vim-style + page navigation)
+- 📜 Scrollable timeline that adapts to terminal size
 - 🎨 Beautiful terminal UI with colors
 - 🔐 Secure credential storage (auto-login on next run)
 - 🌐 Cross-platform support (Windows, macOS, Linux)
@@ -44,7 +45,10 @@ BSKY_SERVICE=https://bsky.social
 ## Keyboard Shortcuts
 
 ### Timeline View
-- `↑/↓` or `j/k` - Navigate posts
+- `↑/↓` or `j/k` - Navigate posts one by one
+- `PageUp/PageDown` - Navigate by page
+- `g` - Jump to top (first post)
+- `G` - Jump to bottom (last post)
 - `l` - Like/unlike selected post
 - `c` - Compose new post
 - `p` - View profile (coming soon)

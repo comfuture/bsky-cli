@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Box, Text } from 'ink'
 import chalk from 'chalk'
 import { formatDistanceToNow } from 'date-fns'
@@ -9,8 +9,11 @@ interface PostItemProps {
   isSelected: boolean
 }
 
-export const PostItem: React.FC<PostItemProps> = ({ post, isSelected }) => {
-  const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })
+export const PostItem: React.FC<PostItemProps> = React.memo(({ post, isSelected }) => {
+  const timeAgo = useMemo(() => 
+    formatDistanceToNow(new Date(post.createdAt), { addSuffix: true }),
+    [post.createdAt]
+  )
   
   const formatText = (text: string): string => {
     // Simple formatting for mentions and links
@@ -22,13 +25,18 @@ export const PostItem: React.FC<PostItemProps> = ({ post, isSelected }) => {
   const borderColor = isSelected ? 'blue' : 'gray'
 
   return (
-    <Box
-      borderStyle="single"
-      borderColor={borderColor}
-      paddingX={1}
-      marginY={0}
-      flexDirection="column"
-    >
+    <Box gap={1}>
+      <Box width={2}>
+        <Text color="blue" bold>{isSelected ? '▶' : '  '}</Text>
+      </Box>
+      <Box
+        borderStyle="single"
+        borderColor={borderColor}
+        paddingX={1}
+        marginY={0}
+        flexDirection="column"
+        flexGrow={1}
+      >
       <Box justifyContent="space-between">
         <Text>
           <Text bold color="green">@{post.author.handle}</Text>
@@ -54,6 +62,7 @@ export const PostItem: React.FC<PostItemProps> = ({ post, isSelected }) => {
           💬 {post.replyCount}
         </Text>
       </Box>
+      </Box>
     </Box>
   )
-}
+})

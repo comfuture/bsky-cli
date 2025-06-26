@@ -49,7 +49,6 @@ export class CredentialStorage {
         { mode: 0o600 }
       )
     } catch (error) {
-      console.error('Failed to save credentials:', error)
       throw error
     }
   }
