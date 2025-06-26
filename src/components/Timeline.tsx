@@ -104,7 +104,7 @@ export const Timeline: React.FC<TimelineProps> = ({ blueskyService, onNavigate }
 
       <Box borderStyle="single" borderColor="gray" paddingX={1}>
         <Text dimColor>
-          [↑↓/jk] Navigate  [l] Like  [c] Compose  [p] Profile  [n] Notifications  [r] Refresh  [q] Quit
+          [↑↓/jk] Navigate  [l] Like  [c] Compose  [p] Profile  [n] Notifications  [r] Refresh  [L] Logout  [q] Quit
         </Text>
       </Box>
     </Box>

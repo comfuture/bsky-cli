@@ -1,4 +1,4 @@
-import { BskyAgent, AppBskyFeedDefs, AppBskyNotificationListNotifications } from '@atproto/api'
+import { BskyAgent, AppBskyFeedDefs, AppBskyNotificationListNotifications, AtpSessionData } from '@atproto/api'
 
 export interface TimelinePost {
   uri: string
@@ -35,6 +35,10 @@ export class BlueskyService {
     if (!response.success) {
       throw new Error('Login failed')
     }
+  }
+
+  async resumeSession(session: AtpSessionData): Promise<void> {
+    await this.agent.resumeSession(session)
   }
 
   async getTimeline(cursor?: string): Promise<{

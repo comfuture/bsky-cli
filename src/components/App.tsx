@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Text, useInput, useApp } from 'ink'
+import Spinner from 'ink-spinner'
 import { BlueskyService } from '../services/bluesky.js'
 import { AuthService } from '../services/auth.js'
 import { Login } from './Login.js'
@@ -11,11 +12,35 @@ export const App: React.FC = () => {
   const [blueskyService] = useState(() => new BlueskyService())
   const [authService] = useState(() => new AuthService(blueskyService))
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
   const [currentView, setCurrentView] = useState<'timeline' | 'compose' | 'profile' | 'notifications'>('timeline')
+
+  useEffect(() => {
+    checkSavedCredentials()
+  }, [])
+
+  const checkSavedCredentials = async () => {
+    try {
+      const hasSaved = await authService.hasSavedCredentials()
+      if (hasSaved) {
+        const success = await authService.loginWithSavedCredentials()
+        if (success) {
+          setIsAuthenticated(true)
+        }
+      }
+    } catch (error) {
+      // Ignore errors and show login screen
+    } finally {
+      setIsCheckingAuth(false)
+    }
+  }
 
   useInput((input) => {
     if (input === 'q' && currentView !== 'compose') {
       exit()
+    } else if (input === 'L' && isAuthenticated) {
+      // Logout with capital L
+      handleLogout()
     }
   }, { isActive: isAuthenticated })
 
@@ -26,6 +51,12 @@ export const App: React.FC = () => {
     } else {
       throw new Error('Invalid credentials')
     }
+  }
+
+  const handleLogout = async () => {
+    await authService.logout()
+    setIsAuthenticated(false)
+    setCurrentView('timeline')
   }
 
   const handleNavigate = (view: string) => {
@@ -46,6 +77,17 @@ export const App: React.FC = () => {
 
   const handlePostComplete = () => {
     setCurrentView('timeline')
+  }
+
+  if (isCheckingAuth) {
+    return (
+      <Box padding={1}>
+        <Text color="green">
+          <Spinner type="dots" />
+        </Text>
+        <Text> Checking saved credentials...</Text>
+      </Box>
+    )
   }
 
   if (!isAuthenticated) {

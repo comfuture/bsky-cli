@@ -9,6 +9,8 @@ A fancy terminal client for Bluesky built with TypeScript and Ink (React for CLI
 - ❤️ Like and interact with posts  
 - ⌨️ Keyboard navigation
 - 🎨 Beautiful terminal UI with colors
+- 🔐 Secure credential storage (auto-login on next run)
+- 🌐 Cross-platform support (Windows, macOS, Linux)
 
 ## Installation
 
@@ -48,6 +50,7 @@ BSKY_SERVICE=https://bsky.social
 - `p` - View profile (coming soon)
 - `n` - View notifications (coming soon)
 - `r` - Refresh timeline
+- `L` - Logout (clears saved credentials)
 - `q` - Quit
 
 ### Compose View
@@ -73,6 +76,16 @@ src/
 ├── utils/          # Utility functions
 └── index.tsx       # Entry point
 ```
+
+## Credential Storage
+
+The client securely saves your authentication tokens after the first successful login:
+
+- **Windows**: `%LOCALAPPDATA%\bsky-cli\credentials.json`
+- **macOS**: `~/Library/Application Support/bsky-cli/credentials.json`
+- **Linux**: `~/.config/bsky-cli/credentials.json`
+
+Credentials are stored with restricted permissions (owner read/write only) and will be automatically used on subsequent launches. Use the `L` key to logout and clear saved credentials.
 
 ## Future Enhancements
 
